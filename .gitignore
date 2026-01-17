@@ -1,0 +1,27 @@
+# Scala / sbt
+**/target/
+**/project/target/
+**/project/project/
+.bloop/
+.bsp/
+.metals/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# OpenAPI generator cache
+.openapi-generator/
+
+# Optional: keep jar out of git (tool can be re-downloaded)
+openapi-generator-cli.jar
+
+# History
+.history*
