@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: Football Management API
+  description: API REST pour gérer les équipes, joueurs et matchs d'un système de football.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Serveur local
+
+paths:
+  /teams:
+    get:
+      summary: Récupérer la liste des équipes
+      operationId: getTeams
+      responses:
+        '200':
+          description: Liste des équipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+    post:
+      summary: Ajouter une nouvelle équipe
+      operationId: createTeam
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Team'
+      responses:
+        '201':
+          description: Équipe ajoutée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+
+  /teams/{id}:
+    delete:
+      summary: Supprimer une équipe
+      operationId: deleteTeam
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Équipe supprimée avec succès
+        '404':
+          description: Équipe non trouvée
+
+  /players:
+    get:
+      summary: Récupérer la liste des joueurs
+      operationId: getPlayers
+      responses:
+        '200':
+          description: Liste des joueurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Player'
+    post:
+      summary: Ajouter un nouveau joueur
+      operationId: createPlayer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Player'
+      responses:
+        '201':
+          description: Joueur ajouté avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Player'
+
+  /players/{id}:
+    delete:
+      summary: Supprimer un joueur
+      operationId: deletePlayer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Joueur supprimé avec succès
+        '404':
+          description: Joueur non trouvé
+
+  /matches:
+    get:
+      summary: Récupérer la liste des matchs
+      operationId: getMatches
+      responses:
+        '200':
+          description: Liste des matchs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Match'
+    post:
+      summary: Ajouter un nouveau match
+      operationId: createMatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Match'
+      responses:
+        '201':
+          description: Match ajouté avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+
+  /matches/{id}:
+    delete:
+      summary: Supprimer un match
+      operationId: deleteMatch
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Match supprimé avec succès
+        '404':
+          description: Match non trouvé
+
+components:
+  schemas:
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique de l'équipe
+        name:
+          type: string
+          description: Nom de l'équipe
+      required:
+        - id
+        - name
+
+    Player:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique du joueur
+        name:
+          type: string
+          description: Nom du joueur
+        teamId:
+          type: string
+          description: Identifiant de l'équipe du joueur
+      required:
+        - id
+        - name
+        - teamId
+
+    Match:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique du match
+        team1Id:
+          type: string
+          description: Identifiant de l'équipe 1
+        team2Id:
+          type: string
+          description: Identifiant de l'équipe 2
+        score:
+          type: string
+          description: Score final du match (e.g., 2-1)
+      required:
+        - id
+        - team1Id
+        - team2Id
