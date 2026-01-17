@@ -1,0 +1,78 @@
+@startuml
+actor Client
+participant "HTTP Server" as HTTP
+participant "FootballApiServiceImpl" as Service
+participant "TeamActor" as TeamActor
+participant "PlayerActor" as PlayerActor
+participant "MatchActor" as MatchActor
+database "In-Memory State" as State
+
+== Création d'une équipe ==
+Client -> HTTP: POST /teams
+activate HTTP
+HTTP -> Service: createTeam(team)
+activate Service
+Service -> TeamActor: CreateTeam(team, replyTo)
+activate TeamActor
+TeamActor -> State: Ajouter équipe
+TeamActor --> Service: TeamCreated(team)
+deactivate TeamActor
+Service --> HTTP: HTTP 201 Created
+deactivate Service
+HTTP --> Client: JSON Response
+deactivate HTTP
+
+== Création d'un joueur ==
+Client -> HTTP: POST /players
+activate HTTP
+HTTP -> Service: createPlayer(player)
+activate Service
+Service -> PlayerActor: CreatePlayer(player, replyTo)
+activate PlayerActor
+PlayerActor -> TeamActor: ValidateTeam(teamId)
+activate TeamActor
+TeamActor --> PlayerActor: TeamExists
+deactivate TeamActor
+PlayerActor -> State: Ajouter joueur
+PlayerActor --> Service: PlayerCreated(player)
+deactivate PlayerActor
+Service --> HTTP: HTTP 201 Created
+deactivate Service
+HTTP --> Client: JSON Response
+deactivate HTTP
+
+== Création d'un match ==
+Client -> HTTP: POST /matches
+activate HTTP
+HTTP -> Service: createMatch(match)
+activate Service
+Service -> MatchActor: CreateMatch(match, replyTo)
+activate MatchActor
+MatchActor -> TeamActor: ValidateTeams(team1Id, team2Id)
+activate TeamActor
+TeamActor --> MatchActor: TeamsExist
+deactivate TeamActor
+MatchActor -> State: Ajouter match
+MatchActor --> Service: MatchCreated(match)
+deactivate MatchActor
+Service --> HTTP: HTTP 201 Created
+deactivate Service
+HTTP --> Client: JSON Response
+deactivate HTTP
+
+== Liste des équipes ==
+Client -> HTTP: GET /teams
+activate HTTP
+HTTP -> Service: getTeams()
+activate Service
+Service -> TeamActor: GetTeams(replyTo)
+activate TeamActor
+TeamActor -> State: Lire équipes
+TeamActor --> Service: Teams(List[Team])
+deactivate TeamActor
+Service --> HTTP: HTTP 200 OK
+deactivate Service
+HTTP --> Client: JSON Response
+deactivate HTTP
+
+@enduml
