@@ -17,11 +17,5 @@ Thumbs.db
 # Logs
 *.log
 
-# OpenAPI generator cache
-.openapi-generator/
-
-# Optional: keep jar out of git (tool can be re-downloaded)
-openapi-generator-cli.jar
-
 # History
 .history*
